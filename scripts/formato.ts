@@ -65,7 +65,14 @@ principal(async () => {
   const info = await sondar(abs);
 
   let palavras: Palavra[] = c.legenda?.palavras ?? [];
-  if (values.legendar) {
+  // legenda já transcrita (UGC.mp4.palavras.json / UGC-apertado.mp4.palavras.json), inclusive do vídeo antes de tirar o fundo
+  const cacheLegenda = [`${abs}.palavras.json`, abs.replace(/-sem-fundo\.webm$/i, ".mp4") + ".palavras.json"].find(existsSync);
+  if (values.legendar && cacheLegenda) {
+    console.log(`↺ Legenda de ${path.basename(cacheLegenda)}`);
+    const ini = c.avatar?.inicio ?? 0;
+    palavras = (JSON.parse(readFileSync(cacheLegenda, "utf8")) as Palavra[]).map((p) => ({ ...p, inicio: +(p.inicio - ini).toFixed(3), fim: +(p.fim - ini).toFixed(3) })).filter((p) => p.fim > 0);
+    c.legenda = { ativa: true, template: "hormozi", posicao: "baixo", enfase: [], ...(c.legenda ?? {}), palavras };
+  } else if (values.legendar) {
     console.log(`⏳ Transcrevendo a fala do avatar (${values.motor})…`);
     palavras = values.motor === "scribe" ? await transcreverScribe(new Blob([readFileSync(abs)]), path.basename(abs)) : await transcreverLocal(abs);
     const ini = c.avatar?.inicio ?? 0;

@@ -8,7 +8,14 @@ const VERSAO = "1.5.5";
 const PASTA = path.join(RAIZ, "whisper");
 
 /** Transcreve um áudio/vídeo em PT-BR com Whisper local (grátis). Devolve palavras com tempo. */
-export const transcreverLocal = async (arquivo: string, modelo = (process.env.WHISPER_MODELO || "medium") as WhisperModel): Promise<Palavra[]> => {
+export const transcreverLocal = async (arquivoEntrada: string, modeloPedido?: WhisperModel): Promise<Palavra[]> => {
+  const arquivo = arquivoEntrada;
+  let modelo = (modeloPedido || process.env.WHISPER_MODELO || "medium") as WhisperModel;
+  // O whisper.cpp 1.5.5 não tem tempo por palavra para o turbo: usa o medium no lugar
+  if (modelo === "large-v3-turbo") {
+    console.log("ℹ large-v3-turbo não dá tempo por palavra nesta versão; usando medium.");
+    modelo = "medium";
+  }
   const cwd = process.cwd();
   process.chdir(RAIZ); // o instalador baixa arquivos temporários na pasta atual
   try {

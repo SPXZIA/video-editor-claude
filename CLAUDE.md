@@ -58,6 +58,10 @@ Na tela dividida o corte "cover" normalmente já tira o rodapé; se não, use `a
 **Remover o fundo do avatar** (para o formato UGC ficar "recortado" sobre o produto):
 `npm run remover-fundo -- clipes/<pasta>/avatar.mp4` → gera `avatar-sem-fundo.webm` (transparente, com áudio).
 Fundo liso/verde sai por chroma key (segundos); fundo comum sai com IA local (MODNet, ~0,1–0,4 s por quadro).
+**Se a roupa tiver cor parecida com o fundo (ex.: blusa branca + parede clara), use `--metodo ia`**, senão o chroma key come a roupa.
+A IA também costuma apagar a marca d'água da HeyGen (ela fica no fundo); confira e reduza o `--descer` se já sumiu.
+Antes de tirar o fundo, aperte as pausas do vídeo falado: `npm run apertar-video -- clipes/<pasta>/avatar.mp4`
+(corta vídeo+áudio juntos e remapeia `<video>.palavras.json`). Ordem: transcrever → apertar-video → remover-fundo → formato.
 Depois: `npm run formato -- <nome> ugc --avatar clipes/<pasta>/avatar-sem-fundo.webm --transparente --voz-do-avatar --legendar`.
 Confira bordas/cabelo no `conferencia.jpg`; se tremer, aumente `--suavizar 0.5`.
 

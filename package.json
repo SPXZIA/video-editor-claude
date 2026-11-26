@@ -21,7 +21,8 @@
     "ugc": "tsx scripts/ugc.ts",
     "lipsync": "tsx scripts/lipsync.ts",
     "formato": "tsx scripts/formato.ts",
-    "remover-fundo": "tsx scripts/remover-fundo.ts"
+    "remover-fundo": "tsx scripts/remover-fundo.ts",
+    "apertar-video": "tsx scripts/apertar-video.ts"
   },
   "engines": {
     "node": ">=20"

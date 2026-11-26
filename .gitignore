@@ -14,3 +14,6 @@ workspace/criativos/*
 !workspace/criativos/exemplo/
 workspace/criativos/exemplo/saida/
 src/gerado/criativos.ts
+
+# ferramentas externas (MuseTalk etc.)
+ferramentas/

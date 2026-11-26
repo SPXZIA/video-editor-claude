@@ -86,7 +86,7 @@ const cena = z.object({
 export type Cena = z.infer<typeof cena>;
 
 /**
- * B-roll por cima da cena principal (UGC / lipsync): a fala continua por baixo
+ * B-roll por cima da cena principal (UGC): a fala continua por baixo
  * e a imagem do produto entra por cima. `em` = segundo no timeline final.
  */
 const sobreposicao = z.object({
@@ -106,7 +106,7 @@ const sobreposicao = z.object({
 export type Sobreposicao = z.infer<typeof sobreposicao>;
 
 /**
- * Avatar (HeyGen, lipsync, UGC gravado) por cima dos vídeos do produto.
+ * Avatar (HeyGen, UGC gravado) por cima dos vídeos do produto.
  * `momentos` muda o layout ao longo do vídeo, com animação suave entre eles:
  *   ugc-centro  → avatar grande, centralizado, colado embaixo (hook do formato UGC)
  *   ugc-canto   → avatar menor no canto inferior direito (depois do hook)

@@ -19,12 +19,10 @@
     "verificar": "tsc --noEmit",
     "apertar": "tsx scripts/apertar.ts",
     "ugc": "tsx scripts/ugc.ts",
-    "lipsync": "tsx scripts/lipsync.ts",
     "formato": "tsx scripts/formato.ts",
     "remover-fundo": "tsx scripts/remover-fundo.ts",
     "apertar-video": "tsx scripts/apertar-video.ts",
-    "instalar-skill": "tsx scripts/instalar-skill.ts",
-    "lipsync-local": "tsx scripts/lipsync-local.ts"
+    "instalar-skill": "tsx scripts/instalar-skill.ts"
   },
   "engines": {
     "node": ">=20"

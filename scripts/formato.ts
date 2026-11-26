@@ -1,5 +1,5 @@
 /**
- * Aplica um formato de criativo com avatar (HeyGen, lipsync, UGC gravado).
+ * Aplica um formato de criativo com avatar (HeyGen, UGC gravado).
  *   npm run formato -- <criativo> <formato> [--avatar clipes/avatar/x.mp4] [--hook 2.5] [--descer 12]
  *                      [--voz-do-avatar] [--legendar] [--motor whisper|scribe] [--ajustar] [--transparente]
  * Formatos:

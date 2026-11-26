@@ -69,9 +69,9 @@ Voz do avatar: o ideal é gerar a narração aqui (`npm run narrar`, pausas aper
 `narracao.mp3` no HeyGen e usar o vídeo que ele devolve: o avatar entra mudo e o som/legenda vêm da
 narração (sincronia exata). Se o vídeo já vier com a voz do HeyGen: `--voz-do-avatar --legendar`.
 
-## UGC gravado e Lipsync (trilha principal + b-roll)
+## UGC gravado (trilha principal + b-roll)
 
-Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por cima** em `sobreposicoes`
+Usa uma **trilha principal (A-roll)** de alguém falando + **b-roll por cima** em `sobreposicoes`
 (a fala continua por baixo). Layouts: `tela-cheia` (corta para o produto), `pip` (janelinha no canto),
 `metade-cima` / `metade-baixo` (tela dividida). Entradas: corte, fade, pop, slide. `em` = segundo no timeline final.
 
@@ -79,20 +79,9 @@ Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por
   corta silêncios e "éé/ahn/hum", alterna zoom a cada corte (disfarça o jump cut) e gera cenas + legenda.
   Leia `<video>.frases.md` para descartar takes repetidas/erradas (apague as cenas correspondentes e
   re-cronometre a legenda, ou corte o vídeo e rode de novo). Depois coloque b-roll a cada 2–4 s em `sobreposicoes`.
-- **Lipsync (avatar falando a copy):** 1) `npm run narrar -- <nome>` gera `narracao.mp3` já apertada;
-  2) gere o vídeo do avatar com essa narração (ElevenLabs pelo conector do Claude, HeyGen, Hedra, Sync…)
-  e salve em `workspace/clipes/<pasta>/`; 3) `npm run lipsync -- <nome> clipes/<pasta>/avatar.mp4`.
-  O som continua vindo da `narracao.mp3` (legenda exata). Depois b-roll em `sobreposicoes`.
-- **Lipsync grátis no PC (LatentSync 1.5 da ByteDance, em `ferramentas/LatentSync`):** sem créditos na HeyGen, use
-  `npm run lipsync-local -- <nome> --video clipes/<pasta>/base.mp4` (áudio padrão: `narracao.mp3` do criativo).
-  Vídeo-base: rosto de frente, boca neutra; pode ser um avatar antigo da HeyGen ou qualquer pessoa falando (o lipsync
-  só troca a boca, então a marca d'água continua: esconda com `--descer` ou tire o fundo).
-  Mais nitidez: `--passos 30` (mais lento); boca mais marcada: `--guia 2`. Depois: `remover-fundo --metodo ia` →
-  `formato ugc --transparente` (sem `--voz-do-avatar`: som e legenda vêm da narração).
-  A MuseTalk foi testada e o Jean achou a boca horrível (2026-11-26): não use.
-- **Regra do Jean, voz do vídeo UGC:** narração da ElevenLabs → SEMPRE lipsync no vídeo da pessoa e o áudio original
-  dele fica mudo (nunca duas vozes; o `lipsync-local` já entrega o vídeo sem som). Usando a voz que já está no vídeo
-  (`--voz-do-avatar`) → NÃO faça lipsync, a boca já está certa.
+- **Sem lipsync (decisão do Jean, 2026-11-26):** o lipsync foi testado (MuseTalk e LatentSync no PC) e removido
+  do editor; não reinstale nem ofereça. Vídeo de pessoa falando entra com a própria voz (`--voz-do-avatar`) ou foi
+  gerado já falando a `narracao.mp3` (HeyGen). Nunca duas vozes: se usar a narração da ElevenLabs, o áudio do vídeo fica mudo.
 - Primeiros 1,5 s de UGC: rosto + frase forte, ou b-roll `tela-cheia` do produto com a voz por cima.
 
 ## Regras de edição para anúncio

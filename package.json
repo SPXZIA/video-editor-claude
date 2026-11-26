@@ -23,7 +23,8 @@
     "formato": "tsx scripts/formato.ts",
     "remover-fundo": "tsx scripts/remover-fundo.ts",
     "apertar-video": "tsx scripts/apertar-video.ts",
-    "instalar-skill": "tsx scripts/instalar-skill.ts"
+    "instalar-skill": "tsx scripts/instalar-skill.ts",
+    "lipsync-local": "tsx scripts/lipsync-local.ts"
   },
   "engines": {
     "node": ">=20"

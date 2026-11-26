@@ -83,6 +83,12 @@ Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por
   2) gere o vídeo do avatar com essa narração (ElevenLabs pelo conector do Claude, HeyGen, Hedra, Sync…)
   e salve em `workspace/clipes/<pasta>/`; 3) `npm run lipsync -- <nome> clipes/<pasta>/avatar.mp4`.
   O som continua vindo da `narracao.mp3` (legenda exata). Depois b-roll em `sobreposicoes`.
+- **Lipsync grátis no PC (MuseTalk 1.5, instalada em `ferramentas/MuseTalk`):** sem créditos na HeyGen, use
+  `npm run lipsync-local -- <nome> --video clipes/<pasta>/base.mp4` (áudio padrão: `narracao.mp3` do criativo).
+  Vídeo-base: rosto de frente, boca neutra; pode ser um avatar antigo da HeyGen ou qualquer pessoa falando (a MuseTalk
+  só troca a boca, então a marca d'água continua: esconda com `--descer` ou tire o fundo). Leva ~3–5 s por segundo de vídeo.
+  Boca pouco aberta/muito aberta: `--bbox 5` / `--bbox -5`. Depois: `remover-fundo --metodo ia` → `formato ugc --transparente`
+  (sem `--voz-do-avatar`: som e legenda vêm da narração).
 - Primeiros 1,5 s de UGC: rosto + frase forte, ou b-roll `tela-cheia` do produto com a voz por cima.
 
 ## Regras de edição para anúncio

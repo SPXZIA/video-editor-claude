@@ -62,7 +62,7 @@ const binario = (nome: "ffmpeg" | "ffprobe") => {
 export const FFMPEG = binario("ffmpeg");
 export const FFPROBE = binario("ffprobe");
 
-export const rodar = (cmd: string, args: string[], opts: { silencioso?: boolean } = {}) =>
+export const rodar = (cmd: string, args: string[], opts: { silencioso?: boolean; cwd?: string; aoVivo?: boolean } = {}) =>
   new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
     const dir = path.dirname(cmd);
     const env = { ...process.env };
@@ -71,13 +71,16 @@ export const rodar = (cmd: string, args: string[], opts: { silencioso?: boolean 
       env.LD_LIBRARY_PATH = [dir, env.LD_LIBRARY_PATH].filter(Boolean).join(":");
       env.DYLD_LIBRARY_PATH = [dir, env.DYLD_LIBRARY_PATH].filter(Boolean).join(":");
     }
-    const p = spawn(cmd, args, { env, windowsHide: true });
+    const p = spawn(cmd, args, { env, windowsHide: true, cwd: opts.cwd });
     let stdout = "";
     let stderr = "";
-    p.stdout.on("data", (d) => (stdout += d));
+    p.stdout.on("data", (d) => {
+      stdout += d;
+      if (opts.aoVivo) process.stdout.write(d);
+    });
     p.stderr.on("data", (d) => {
       stderr += d;
-      if (!opts.silencioso && process.env.DEBUG) process.stderr.write(d);
+      if (opts.aoVivo || (!opts.silencioso && process.env.DEBUG)) process.stderr.write(d);
     });
     p.on("error", reject);
     p.on("close", (code) =>

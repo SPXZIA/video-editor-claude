@@ -29,7 +29,7 @@ o Remotion renderiza. O formato completo (com comentários) está em `src/schema
      crédito: `npm run apertar -- <nome> --pausa-frase 0.3` (e depois re-cronometre `textos` e cenas).
    - Voz real do usuário: `npm run transcrever -- <arquivo> --criativo <nome>` (Whisper local, grátis).
    - `musica`: escolha em `workspace/musicas/indice.md` (rode `npm run musicas` antes).
-   - `textos`: gancho visual no início (`hook`), `cta` no final, `preco`/`etiqueta` quando houver oferta.
+   - `textos`: só o `cta` no final (sem headline/título de hook — preferência do Jean).
 5. **Render.** `npm run render -- <nome> --preview` (rápido) e depois `npm run render -- <nome>`.
 6. **Conferência (obrigatória antes de mostrar).** `npm run conferir -- <nome>` e **olhe**
    `saida/conferencia.jpg`. Cheque: legenda legível e dentro da tela, texto não cobre o produto,
@@ -87,8 +87,12 @@ Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por
 
 ## Regras de edição para anúncio
 
-- **Primeiros 1,5 s decidem tudo:** a cena 1 tem que ser o plano mais forte, com `movimento: "punch"`
-  e texto `hook` na tela. Nada de abertura lenta ou logo no começo.
+- **Sem títulos/headlines na tela** (estilos `hook` e `titulo` em `textos`): o Jean não quer. A legenda
+  já carrega o hook. Só use `textos` para o CTA final ("Toque em Saiba Mais 👇") ou se ele pedir.
+- **Legenda no formato UGC fica em cima** (`posicao: "cima"`, 2 palavras por bloco): embaixo ela cobre o avatar.
+  O `npm run formato -- … ugc` já faz isso. Na tela dividida fica no meio; no entregável, embaixo.
+- **Primeiros 1,5 s decidem tudo:** a cena 1 tem que ser o plano mais forte, com `movimento: "punch"`.
+  Nada de abertura lenta ou logo no começo.
 - Cortes rápidos: cenas de **0,8 a 2,5 s**. Troque de plano a cada frase da narração.
 - Transição não é enfeite: use `corte` na maior parte; `whip`/`zoom`/`flash` em 2–3 viradas importantes.
 - Legenda padrão: `hormozi`, posição `baixo` (fica acima da interface do app). Coloque em `legenda.enfase`

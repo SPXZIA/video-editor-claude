@@ -93,8 +93,12 @@ principal(async () => {
     proporcao: info.largura && info.altura ? +(info.largura / info.altura).toFixed(4) : 9 / 16,
     momentos: FORMATOS[formato](hook),
   };
-  // Com avatar grande no centro, blocos de 3 palavras quebram em 2 linhas e sobem até o rosto
-  if (formato.startsWith("ugc") && c.legenda && c.legenda.palavrasPorBloco === undefined) c.legenda.palavrasPorBloco = 2;
+  // Formato UGC: o avatar ocupa a parte de baixo, então a legenda vai para cima (preferência do Jean),
+  // em blocos de 2 palavras para caber numa linha
+  if (/ugc/.test(formato) && c.legenda) {
+    c.legenda.posicao = "cima";
+    if (c.legenda.palavrasPorBloco === undefined) c.legenda.palavrasPorBloco = 2;
+  }
   if (vozDoAvatar) delete c.narracao;
   else if (!c.narracao) console.log("⚠ Sem narracao.mp3 e avatar mudo: use --voz-do-avatar ou rode npm run narrar antes.");
 

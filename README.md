@@ -57,7 +57,7 @@ ele copia os arquivos para o editor, monta e devolve o MP4 na própria pasta.
 | `npm run apertar -- <nome>` | Aperta pausas longas de uma narração já gerada (sem gastar crédito) |
 | `npm run ugc -- <nome> <video...>` | UGC: corta silêncios/vícios da fala e gera cenas + legenda |
 | `npm run lipsync -- <nome> <video>` | Usa um vídeo de avatar com lipsync como trilha principal |
-| `npm run lipsync-local -- <nome> --video <base>` | Lipsync grátis no PC (MuseTalk, placa NVIDIA): faz a boca do vídeo-base falar a narração |
+| `npm run lipsync-local -- <nome> --video <base>` | Lipsync grátis no PC (LatentSync 1.5, placa NVIDIA): faz a boca do vídeo-base falar a narração |
 | `npm run formato -- <nome> <formato> --avatar <video>` | UGC, tela dividida, entregável e combinações (avatar HeyGen, esconde marca d'água) |
 | `npm run apertar-video -- <video>` | Corta as pausas de um vídeo falado (vídeo + áudio + legenda) |
 | `npm run remover-fundo -- <video>` | Tira o fundo do avatar (tela verde ou IA local) e gera .webm transparente |

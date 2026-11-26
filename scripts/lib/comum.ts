@@ -62,10 +62,10 @@ const binario = (nome: "ffmpeg" | "ffprobe") => {
 export const FFMPEG = binario("ffmpeg");
 export const FFPROBE = binario("ffprobe");
 
-export const rodar = (cmd: string, args: string[], opts: { silencioso?: boolean; cwd?: string; aoVivo?: boolean } = {}) =>
+export const rodar = (cmd: string, args: string[], opts: { silencioso?: boolean; cwd?: string; aoVivo?: boolean; env?: Record<string, string | undefined> } = {}) =>
   new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
     const dir = path.dirname(cmd);
-    const env = { ...process.env };
+    const env = { ...process.env, ...opts.env };
     // as libs do ffmpeg do Remotion ficam na mesma pasta do binário
     if (path.isAbsolute(cmd) && process.platform !== "win32") {
       env.LD_LIBRARY_PATH = [dir, env.LD_LIBRARY_PATH].filter(Boolean).join(":");

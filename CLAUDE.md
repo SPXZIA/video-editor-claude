@@ -89,6 +89,9 @@ Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por
   só troca a boca, então a marca d'água continua: esconda com `--descer` ou tire o fundo). Leva ~3–5 s por segundo de vídeo.
   Boca pouco aberta/muito aberta: `--bbox 5` / `--bbox -5`. Depois: `remover-fundo --metodo ia` → `formato ugc --transparente`
   (sem `--voz-do-avatar`: som e legenda vêm da narração).
+- **Regra do Jean, voz do vídeo UGC:** narração da ElevenLabs → SEMPRE lipsync no vídeo da pessoa e o áudio original
+  dele fica mudo (nunca duas vozes; o `lipsync-local` já entrega o vídeo sem som). Usando a voz que já está no vídeo
+  (`--voz-do-avatar`) → NÃO faça lipsync, a boca já está certa.
 - Primeiros 1,5 s de UGC: rosto + frase forte, ou b-roll `tela-cheia` do produto com a voz por cima.
 
 ## Regras de edição para anúncio

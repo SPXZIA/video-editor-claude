@@ -8,7 +8,7 @@
  *   UGC recortado: npm run remover-fundo -- <saida> --metodo ia  →  npm run formato -- <criativo> ugc --avatar <saida-sem-fundo.webm> --transparente
  *   Avatar tela cheia: npm run lipsync -- <criativo> <saida>
  */
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { FFMPEG, RAIZ, WORKSPACE, pastaCriativo, principal, relWorkspace, rodar, sondar, validarNome } from "./lib/comum";
@@ -73,7 +73,8 @@ principal(async () => {
     const mp4 = existsSync(pastaRes) ? readdirSync(pastaRes).find((f) => f.endsWith(".mp4")) : undefined;
     if (!mp4) throw new Error(`A MuseTalk terminou mas não gerou MP4 em ${pastaRes}`);
     mkdirSync(path.dirname(saida), { recursive: true });
-    copyFileSync(path.join(pastaRes, mp4), saida);
+    // Sai MUDO: a voz vem só da narracao.mp3 do criativo (nunca duas vozes)
+    await rodar(FFMPEG, ["-y", "-hide_banner", "-i", path.join(pastaRes, mp4), "-an", "-c:v", "copy", saida]);
     rmSync(path.join(MUSETALK, "results", id), { recursive: true, force: true });
   } finally {
     rmSync(vIn, { force: true });

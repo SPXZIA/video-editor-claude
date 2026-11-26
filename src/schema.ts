@@ -105,6 +105,47 @@ const sobreposicao = z.object({
 });
 export type Sobreposicao = z.infer<typeof sobreposicao>;
 
+/**
+ * Avatar (HeyGen, lipsync, UGC gravado) por cima dos vídeos do produto.
+ * `momentos` muda o layout ao longo do vídeo, com animação suave entre eles:
+ *   ugc-centro  → avatar grande, centralizado, colado embaixo (hook do formato UGC)
+ *   ugc-canto   → avatar menor no canto inferior direito (depois do hook)
+ *   dividida    → avatar na metade de cima, produto na metade de baixo
+ *   tela-cheia  → só o avatar
+ *   oculto      → formato entregável (só o produto)
+ */
+export const LAYOUTS_AVATAR = ["ugc-centro", "ugc-canto", "dividida", "tela-cheia", "oculto"] as const;
+const avatar = z.object({
+  clipe: z.string(),
+  /** Pular o começo do vídeo do avatar (s) */
+  inicio: z.number().default(0),
+  /** Volume da voz do avatar. Use 0 se a voz vier da narração (narracao.mp3) */
+  volume: z.number().min(0).max(2).default(1),
+  /** Vídeo com fundo transparente (WebM/MOV com alfa): avatar recortado sem caixa */
+  transparente: z.boolean().default(false),
+  /** Largura do avatar (% da largura do vídeo) nos layouts UGC */
+  larguraCentro: z.number().default(80),
+  larguraCanto: z.number().default(42),
+  /**
+   * Quanto do avatar fica para FORA da tela embaixo (% da altura do avatar) nos layouts UGC.
+   * É assim que some a marca d'água da HeyGen free (fica no rodapé do vídeo dela). Ex.: 12.
+   */
+  descer: z.number().min(0).max(60).default(0),
+  /** Reenquadrar o avatar na tela dividida/cheia (zoom/x/y), também serve para cortar marca d'água */
+  enquadramento: z
+    .object({ zoom: z.number().min(1).max(3).default(1), x: z.number().default(0), y: z.number().default(0) })
+    .optional(),
+  /** Largura/altura do vídeo do avatar (9:16 = 0.5625) */
+  proporcao: z.number().positive().default(9 / 16),
+  momentos: z
+    .array(z.object({ em: z.number().min(0), layout: z.enum(LAYOUTS_AVATAR) }))
+    .default([{ em: 0, layout: "ugc-centro" }]),
+  /** Duração da animação entre layouts (s) */
+  transicao: z.number().min(0).default(0.35),
+  borda: z.boolean().default(true),
+});
+export type Avatar = z.infer<typeof avatar>;
+
 const legenda = z.object({
   ativa: z.boolean().default(true),
   template: z.enum(TEMPLATES_LEGENDA).default("hormozi"),
@@ -164,6 +205,7 @@ export const criativoSchema = z.object({
     })
     .optional(),
   sobreposicoes: z.array(sobreposicao).default([]),
+  avatar: avatar.optional(),
   legenda: legenda.optional(),
   textos: z.array(texto).default([]),
   /** Cor de fundo quando o clipe não cobre o quadro */

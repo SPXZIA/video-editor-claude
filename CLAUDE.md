@@ -38,7 +38,28 @@ o Remotion renderiza. O formato completo (com comentários) está em `src/schema
 7. **Entrega.** Diga onde está o MP4 (`workspace/criativos/<nome>/saida/<nome>.mp4`) e ofereça variações
    (outro hook, outro template de legenda, outra música). Variação = copiar a pasta com outro nome e mudar o JSON.
 
-## Formatos UGC e Lipsync
+## Formatos de criativo do Jean (os preferidos)
+
+| Formato | Como fica | Comando |
+|---|---|---|
+| **UGC** | vídeos do produto de fundo + avatar grande centralizado embaixo no hook; depois do hook o avatar vai (animado) para o canto inferior direito | `npm run formato -- <nome> ugc --avatar <video>` |
+| **Tela dividida** | avatar na metade de cima, produto na metade de baixo, legenda na linha do meio. Normalmente **só no hook** | `dividida+entregavel` ou `dividida+ugc` |
+| **Entregável** | só os vídeos do produto, sem avatar | `npm run formato -- <nome> entregavel` |
+
+Também: `dividida` (o vídeo todo), `ugc+entregavel`. O fim do hook é o fim da 1ª frase da legenda (ou `--hook 2.5`).
+Ajuste fino no `criativo.json` → `avatar` (`momentos`, `larguraCentro`, `larguraCanto`, `descer`, `enquadramento`).
+
+**Avatar da HeyGen free tem marca d'água no rodapé.** Nos layouts UGC ela some empurrando o avatar
+para baixo/fora da tela: `--descer <%>` (% da altura do avatar abaixo da tela). Antes, rode
+`npm run analisar -- avatar --quadros`, veja a que altura do rodapé está a marca e use esse % + 2.
+Na tela dividida o corte "cover" normalmente já tira o rodapé; se não, use `avatar.enquadramento` (zoom/y).
+**Sempre confira no `conferencia.jpg` que a marca não aparece em nenhum quadro.**
+
+Voz do avatar: o ideal é gerar a narração aqui (`npm run narrar`, pausas apertadas), subir a
+`narracao.mp3` no HeyGen e usar o vídeo que ele devolve: o avatar entra mudo e o som/legenda vêm da
+narração (sincronia exata). Se o vídeo já vier com a voz do HeyGen: `--voz-do-avatar --legendar`.
+
+## UGC gravado e Lipsync (trilha principal + b-roll)
 
 Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por cima** em `sobreposicoes`
 (a fala continua por baixo). Layouts: `tela-cheia` (corta para o produto), `pip` (janelinha no canto),

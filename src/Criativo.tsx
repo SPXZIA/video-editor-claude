@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { AbsoluteFill, Html5Audio, Sequence, interpolate, useVideoConfig } from "remotion";
+import { AbsoluteFill, Html5Audio, Sequence, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { criativoSchema, framesDaCena, framesDaTransicao, type CriativoInput } from "./schema";
 import { CenaView, src } from "./componentes/CenaView";
@@ -7,10 +7,14 @@ import { TextoView } from "./componentes/TextoView";
 import { SobreposicaoView } from "./componentes/SobreposicaoView";
 import { LegendaView } from "./legendas/LegendaView";
 import { apresentacao } from "./transicoes";
+import { AvatarView } from "./avatar/AvatarView";
+import { layoutNoTempo } from "./avatar/layout";
 
 export const Criativo: React.FC<CriativoInput> = (props) => {
   const c = useMemo(() => criativoSchema.parse(props), [props]);
   const { fps, width, height, durationInFrames } = useVideoConfig();
+  const frame = useCurrentFrame();
+  const lay = layoutNoTempo(c.avatar, frame / fps, width, height);
 
   // Janelas em que alguém está falando (para abaixar a música)
   const falas = useMemo(() => {
@@ -41,6 +45,7 @@ export const Criativo: React.FC<CriativoInput> = (props) => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: c.fundo }}>
+      <div style={{ position: "absolute", left: lay.cenas.x, top: lay.cenas.y, width: lay.cenas.w, height: lay.cenas.h, overflow: "hidden" }}>
       <TransitionSeries>
         {c.cenas.flatMap((cena, i) => {
           const dur = framesDaCena(cena, fps);
@@ -64,6 +69,7 @@ export const Criativo: React.FC<CriativoInput> = (props) => {
           return els;
         })}
       </TransitionSeries>
+      </div>
 
       {c.sobreposicoes.map((so, i) => {
         const dur = Math.max(1, Math.round(((so.fim - so.inicio) / so.velocidade) * fps));
@@ -73,6 +79,8 @@ export const Criativo: React.FC<CriativoInput> = (props) => {
           </Sequence>
         );
       })}
+
+      {c.avatar && lay.avatar && <AvatarView a={c.avatar} caixa={lay.avatar} layout={lay.atual} />}
 
       {c.textos.map((tx, i) => {
         const from = Math.round(tx.inicio * fps);
@@ -85,7 +93,7 @@ export const Criativo: React.FC<CriativoInput> = (props) => {
       })}
 
       {/* Legenda sempre por último, por cima de tudo */}
-      {c.legenda?.ativa && c.legenda.palavras.length > 0 && <LegendaView legenda={c.legenda} />}
+      {c.legenda?.ativa && c.legenda.palavras.length > 0 && <LegendaView legenda={lay.atual === "dividida" ? { ...c.legenda, posicao: "meio" } : c.legenda} />}
 
       {c.narracao && (
         <Sequence from={Math.round(c.narracao.inicio * fps)} layout="none">

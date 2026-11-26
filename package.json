@@ -20,12 +20,14 @@
     "apertar": "tsx scripts/apertar.ts",
     "ugc": "tsx scripts/ugc.ts",
     "lipsync": "tsx scripts/lipsync.ts",
-    "formato": "tsx scripts/formato.ts"
+    "formato": "tsx scripts/formato.ts",
+    "remover-fundo": "tsx scripts/remover-fundo.ts"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.3.2",
     "@remotion/bundler": "^4.0.547",
     "@remotion/cli": "^4.0.547",
     "@remotion/fonts": "^4.0.547",
@@ -37,6 +39,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "remotion": "^4.0.547",
+    "sharp": "^0.35.5",
     "zod": "^3.22.3"
   },
   "devDependencies": {

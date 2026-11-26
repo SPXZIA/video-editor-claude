@@ -52,6 +52,7 @@ o render baixa um Chrome próprio (~100 MB) e a transcrição baixa o Whisper (~
 | `npm run ugc -- <nome> <video...>` | UGC: corta silêncios/vícios da fala e gera cenas + legenda |
 | `npm run lipsync -- <nome> <video>` | Usa um vídeo de avatar com lipsync como trilha principal |
 | `npm run formato -- <nome> <formato> --avatar <video>` | UGC, tela dividida, entregável e combinações (avatar HeyGen, esconde marca d'água) |
+| `npm run remover-fundo -- <video>` | Tira o fundo do avatar (tela verde ou IA local) e gera .webm transparente |
 | `npm run vozes` | Lista as vozes da sua conta ElevenLabs |
 | `npm run musicas` | Indexa a biblioteca de músicas |
 | `npm run render -- <nome> [--preview]` | Renderiza o MP4 (áudio normalizado em -14 LUFS) |

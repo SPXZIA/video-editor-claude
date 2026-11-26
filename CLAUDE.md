@@ -55,6 +55,12 @@ para baixo/fora da tela: `--descer <%>` (% da altura do avatar abaixo da tela). 
 Na tela dividida o corte "cover" normalmente já tira o rodapé; se não, use `avatar.enquadramento` (zoom/y).
 **Sempre confira no `conferencia.jpg` que a marca não aparece em nenhum quadro.**
 
+**Remover o fundo do avatar** (para o formato UGC ficar "recortado" sobre o produto):
+`npm run remover-fundo -- clipes/<pasta>/avatar.mp4` → gera `avatar-sem-fundo.webm` (transparente, com áudio).
+Fundo liso/verde sai por chroma key (segundos); fundo comum sai com IA local (MODNet, ~0,1–0,4 s por quadro).
+Depois: `npm run formato -- <nome> ugc --avatar clipes/<pasta>/avatar-sem-fundo.webm --transparente --voz-do-avatar --legendar`.
+Confira bordas/cabelo no `conferencia.jpg`; se tremer, aumente `--suavizar 0.5`.
+
 Voz do avatar: o ideal é gerar a narração aqui (`npm run narrar`, pausas apertadas), subir a
 `narracao.mp3` no HeyGen e usar o vídeo que ele devolve: o avatar entra mudo e o som/legenda vêm da
 narração (sincronia exata). Se o vídeo já vier com a voz do HeyGen: `--voz-do-avatar --legendar`.

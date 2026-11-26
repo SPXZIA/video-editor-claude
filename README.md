@@ -39,6 +39,12 @@ o render baixa um Chrome próprio (~100 MB) e a transcrição baixa o Whisper (~
 3. O Claude analisa os clipes, mostra as copies, você escolhe, ele monta e renderiza.
 4. Para ver/ajustar ao vivo: `npm run studio` e abra http://localhost:3000.
 
+### Abrir o Claude em qualquer pasta
+
+Rode uma vez `npm run instalar-skill`. Depois dá para abrir o `claude` em qualquer pasta
+(ex.: `Downloads\arquivos`) e pedir "use esses arquivos pra montar um criativo no formato UGC":
+ele copia os arquivos para o editor, monta e devolve o MP4 na própria pasta.
+
 ## Comandos
 
 | Comando | O que faz |

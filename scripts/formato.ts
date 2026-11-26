@@ -93,9 +93,9 @@ principal(async () => {
     proporcao: info.largura && info.altura ? +(info.largura / info.altura).toFixed(4) : 9 / 16,
     momentos: FORMATOS[formato](hook),
   };
-  // Formato UGC: o avatar ocupa a parte de baixo, então a legenda vai para cima (preferência do Jean),
-  // em blocos de 2 palavras para caber numa linha
-  if (/ugc/.test(formato) && c.legenda) {
+  // Legenda com avatar (preferência do Jean): em cima, 2 palavras por bloco, porque o avatar ocupa a parte de baixo.
+  // Enquanto a tela estiver dividida, o render coloca a legenda automaticamente no meio (entre os dois vídeos).
+  if (c.legenda) {
     c.legenda.posicao = "cima";
     if (c.legenda.palavrasPorBloco === undefined) c.legenda.palavrasPorBloco = 2;
   }

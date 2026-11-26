@@ -89,8 +89,10 @@ Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por
 
 - **Sem títulos/headlines na tela** (estilos `hook` e `titulo` em `textos`): o Jean não quer. A legenda
   já carrega o hook. Só use `textos` para o CTA final ("Toque em Saiba Mais 👇") ou se ele pedir.
-- **Legenda no formato UGC fica em cima** (`posicao: "cima"`, 2 palavras por bloco): embaixo ela cobre o avatar.
-  O `npm run formato -- … ugc` já faz isso. Na tela dividida fica no meio; no entregável, embaixo.
+- **Legenda com avatar fica em cima** (`posicao: "cima"`, 2 palavras por bloco): embaixo ela cobre o avatar.
+  **Enquanto a tela está dividida, a legenda fica no meio, entre os dois vídeos** (automático no render);
+  quando passa para entregável/UGC depois do hook, volta para cima. O `npm run formato` já configura isso.
+  Entregável puro (sem avatar): legenda embaixo.
 - **Primeiros 1,5 s decidem tudo:** a cena 1 tem que ser o plano mais forte, com `movimento: "punch"`.
   Nada de abertura lenta ou logo no começo.
 - Cortes rápidos: cenas de **0,8 a 2,5 s**. Troque de plano a cada frase da narração.

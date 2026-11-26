@@ -1,0 +1,133 @@
+diff --git a/latentsync/pipelines/lipsync_pipeline.py b/latentsync/pipelines/lipsync_pipeline.py
+index 693155e..18dae09 100644
+--- a/latentsync/pipelines/lipsync_pipeline.py
++++ b/latentsync/pipelines/lipsync_pipeline.py
+@@ -29,6 +29,7 @@ from diffusers.utils import deprecate, logging
+ 
+ from einops import rearrange
+ import cv2
++import kornia
+ 
+ from ..models.unet import UNet3DConditionModel
+ from ..utils.util import read_video, read_audio, write_video, check_ffmpeg_installed
+@@ -238,6 +239,11 @@ class LipsyncPipeline(DiffusionPipeline):
+         # Paste the surrounding pixels back, because we only want to change the mouth region
+         pixel_values = pixel_values.to(device=device, dtype=weight_dtype)
+         masks = masks.to(device=device, dtype=weight_dtype)
++        borda = float(os.environ.get("LATENTSYNC_BORDA", "0") or 0)
++        if borda > 0:
++            # Máscara da boca com borda suave (feather): evita a emenda dura que pisca entre quadros
++            k = int(round(masks.shape[-1] * 0.04 * borda)) * 2 + 1
++            masks = kornia.filters.gaussian_blur2d(masks.float(), (k, k), (k / 4, k / 4)).to(dtype=weight_dtype)
+         combined_pixel_values = decoded_latents * masks + pixel_values * (1 - masks)
+         return combined_pixel_values
+ 
+@@ -253,6 +259,34 @@ class LipsyncPipeline(DiffusionPipeline):
+         faces = []
+         boxes = []
+         affine_matrices = []
++        janela = int(os.environ.get("LATENTSYNC_SUAVIZAR", "0") or 0)
++        if janela > 0:
++            # Suavização temporal do rastreio: detecta todos os quadros, suaviza os 3 pontos de alinhamento
++            # (média móvel centrada, landmarks sem arredondar) e só depois recorta. A mesma matriz é usada
++            # para colar de volta, então o recorte e a colagem deixam de tremer quadro a quadro.
++            if janela == 1:
++                janela = 5
++            print(f"Affine transforming {len(video_frames)} faces (suavizado, janela {janela})...")
++            pts = np.stack(
++                [self.image_processor.detect_landmarks3(f, round_points=False) for f in tqdm.tqdm(video_frames)]
++            )
++            meio = janela // 2
++            pad = np.concatenate([pts[:1].repeat(meio, 0), pts, pts[-1:].repeat(meio, 0)], axis=0)
++            kernel = np.ones(janela) / janela
++            suaves = np.stack(
++                [
++                    np.stack([np.convolve(pad[:, p, c], kernel, mode="valid") for c in range(2)], axis=-1)
++                    for p in range(pts.shape[1])
++                ],
++                axis=1,
++            )
++            for frame, lm3 in zip(video_frames, suaves):
++                face, box, affine_matrix = self.image_processor.warp_with_landmarks3(frame, lm3, smooth=False)
++                faces.append(face)
++                boxes.append(box)
++                affine_matrices.append(affine_matrix)
++            return torch.stack(faces), boxes, affine_matrices
++
+         print(f"Affine transforming {len(video_frames)} faces...")
+         for frame in tqdm.tqdm(video_frames):
+             face, box, affine_matrix = self.image_processor.affine_transform(frame)
+diff --git a/latentsync/utils/affine_transform.py b/latentsync/utils/affine_transform.py
+index a743317..3329bca 100644
+--- a/latentsync/utils/affine_transform.py
++++ b/latentsync/utils/affine_transform.py
+@@ -1,5 +1,7 @@
+ # Adapted from https://github.com/guanjz20/StyleSync/blob/main/utils.py
+ 
++import os
++
+ import numpy as np
+ import cv2
+ import torch
+@@ -71,6 +73,10 @@ class AlignRestore(object):
+         pasted_face = inv_mask_erosion_t * inv_face
+         total_face_area = torch.sum(inv_mask_erosion.float())
+         w_edge = int(total_face_area**0.5) // 20
++        # LATENTSYNC_BORDA > 0: borda da colagem do rosto mais larga e mais suave (menos emenda piscando)
++        borda = float(os.environ.get("LATENTSYNC_BORDA", "0") or 0)
++        if borda > 0:
++            w_edge = max(1, int(w_edge * (1 + borda)))
+         erosion_radius = w_edge * 2
+ 
+         # This step will consume a large amount of GPU memory.
+diff --git a/latentsync/utils/face_detector.py b/latentsync/utils/face_detector.py
+index faa55c9..a6d8486 100644
+--- a/latentsync/utils/face_detector.py
++++ b/latentsync/utils/face_detector.py
+@@ -44,6 +44,8 @@ class FaceDetector:
+             return None, None
+         else:
+             face = get_face_store
++            # landmarks sem arredondar (usados pela suavização temporal, LATENTSYNC_SUAVIZAR)
++            self.ultimo_lmk_float = face.landmark_2d_106.astype(np.float64).copy()
+             lmk = np.round(face.landmark_2d_106).astype(np.int_)
+ 
+             halk_face_coord = np.mean([lmk[74], lmk[73]], axis=0)  # lmk[73]
+diff --git a/latentsync/utils/image_processor.py b/latentsync/utils/image_processor.py
+index 5ac9f4e..9ec4fc1 100644
+--- a/latentsync/utils/image_processor.py
++++ b/latentsync/utils/image_processor.py
+@@ -51,18 +51,31 @@ class ImageProcessor:
+         else:
+             self.face_detector = FaceDetector(device=device)
+ 
+-    def affine_transform(self, image: torch.Tensor) -> np.ndarray:
++    def detect_landmarks3(self, image, round_points: bool = True) -> np.ndarray:
+         if self.face_detector is None:
+             raise NotImplementedError("Using the CPU for face detection is not supported")
+         bbox, landmark_2d_106 = self.face_detector(image)
+         if bbox is None:
+             raise RuntimeError("Face not detected")
++        if not round_points:
++            landmark_2d_106 = self.face_detector.ultimo_lmk_float
+ 
+         pt_left_eye = np.mean(landmark_2d_106[[43, 48, 49, 51, 50]], axis=0)  # left eyebrow center
+         pt_right_eye = np.mean(landmark_2d_106[101:106], axis=0)  # right eyebrow center
+         pt_nose = np.mean(landmark_2d_106[[74, 77, 83, 86]], axis=0)  # nose center
+ 
+-        landmarks3 = np.round([pt_left_eye, pt_right_eye, pt_nose])
++        landmarks3 = np.array([pt_left_eye, pt_right_eye, pt_nose], dtype=np.float64)
++        return np.round(landmarks3) if round_points else landmarks3
++
++    def warp_with_landmarks3(self, image, landmarks3: np.ndarray, smooth: bool = True):
++        face, affine_matrix = self.restorer.align_warp_face(image.copy(), landmarks3=landmarks3, smooth=smooth)
++        box = [0, 0, face.shape[1], face.shape[0]]  # x1, y1, x2, y2
++        face = cv2.resize(face, (self.resolution, self.resolution), interpolation=cv2.INTER_LANCZOS4)
++        face = rearrange(torch.from_numpy(face), "h w c -> c h w")
++        return face, box, affine_matrix
++
++    def affine_transform(self, image: torch.Tensor) -> np.ndarray:
++        landmarks3 = self.detect_landmarks3(image)
+ 
+         face, affine_matrix = self.restorer.align_warp_face(image.copy(), landmarks3=landmarks3, smooth=True)
+         box = [0, 0, face.shape[1], face.shape[0]]  # x1, y1, x2, y2

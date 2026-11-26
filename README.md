@@ -44,10 +44,13 @@ o render baixa um Chrome próprio (~100 MB) e a transcrição baixa o Whisper (~
 | Comando | O que faz |
 |---|---|
 | `npm run studio` | Abre o editor/preview em localhost:3000 |
-| `npm run analisar -- <pasta>` | Inventário dos clipes + folhas de contato |
+| `npm run analisar -- <pasta> [--quadros]` | Inventário dos clipes + folhas de contato (e grade a cada 0,5 s) |
 | `npm run novo -- <nome> --clipes <pasta>` | Cria um criativo novo |
 | `npm run narrar -- <nome> --ajustar` | Narração por IA + legenda sincronizada |
 | `npm run transcrever -- <arquivo> --criativo <nome>` | Legenda de uma voz gravada (Whisper local) |
+| `npm run apertar -- <nome>` | Aperta pausas longas de uma narração já gerada (sem gastar crédito) |
+| `npm run ugc -- <nome> <video...>` | UGC: corta silêncios/vícios da fala e gera cenas + legenda |
+| `npm run lipsync -- <nome> <video>` | Usa um vídeo de avatar com lipsync como trilha principal |
 | `npm run vozes` | Lista as vozes da sua conta ElevenLabs |
 | `npm run musicas` | Indexa a biblioteca de músicas |
 | `npm run render -- <nome> [--preview]` | Renderiza o MP4 (áudio normalizado em -14 LUFS) |

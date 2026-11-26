@@ -16,7 +16,10 @@
     "render": "npm run sync && tsx scripts/render.ts",
     "conferir": "tsx scripts/conferir.ts",
     "exemplo": "tsx scripts/exemplo.ts",
-    "verificar": "tsc --noEmit"
+    "verificar": "tsc --noEmit",
+    "apertar": "tsx scripts/apertar.ts",
+    "ugc": "tsx scripts/ugc.ts",
+    "lipsync": "tsx scripts/lipsync.ts"
   },
   "engines": {
     "node": ">=20"

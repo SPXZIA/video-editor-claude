@@ -24,6 +24,9 @@ o Remotion renderiza. O formato completo (com comentários) está em `src/schema
    - Voz: `npm run narrar -- <nome> --ajustar` gera a narração com a ElevenLabs, grava a legenda
      sincronizada e estica as cenas para a duração da fala. Sem narração, escreva `legenda.palavras`
      à mão (texto aparecendo no ritmo) ou use só `textos`.
+   - O `narrar` já **aperta as pausas** da IA (máx. 0,08 s entre palavras, 0,14 s em vírgula, 0,22 s entre
+     frases) e guarda o original em `narracao-bruta.mp3`. Se ainda ficar lento/corrido, ajuste sem gastar
+     crédito: `npm run apertar -- <nome> --pausa-frase 0.3` (e depois re-cronometre `textos` e cenas).
    - Voz real do usuário: `npm run transcrever -- <arquivo> --criativo <nome>` (Whisper local, grátis).
    - `musica`: escolha em `workspace/musicas/indice.md` (rode `npm run musicas` antes).
    - `textos`: gancho visual no início (`hook`), `cta` no final, `preco`/`etiqueta` quando houver oferta.
@@ -35,6 +38,22 @@ o Remotion renderiza. O formato completo (com comentários) está em `src/schema
 7. **Entrega.** Diga onde está o MP4 (`workspace/criativos/<nome>/saida/<nome>.mp4`) e ofereça variações
    (outro hook, outro template de legenda, outra música). Variação = copiar a pasta com outro nome e mudar o JSON.
 
+## Formatos UGC e Lipsync
+
+Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por cima** em `sobreposicoes`
+(a fala continua por baixo). Layouts: `tela-cheia` (corta para o produto), `pip` (janelinha no canto),
+`metade-cima` / `metade-baixo` (tela dividida). Entradas: corte, fade, pop, slide. `em` = segundo no timeline final.
+
+- **UGC (pessoa real gravando):** `npm run ugc -- <nome> clipes/ugc/take1.mp4 [take2.mp4 …]` transcreve,
+  corta silêncios e "éé/ahn/hum", alterna zoom a cada corte (disfarça o jump cut) e gera cenas + legenda.
+  Leia `<video>.frases.md` para descartar takes repetidas/erradas (apague as cenas correspondentes e
+  re-cronometre a legenda, ou corte o vídeo e rode de novo). Depois coloque b-roll a cada 2–4 s em `sobreposicoes`.
+- **Lipsync (avatar falando a copy):** 1) `npm run narrar -- <nome>` gera `narracao.mp3` já apertada;
+  2) gere o vídeo do avatar com essa narração (ElevenLabs pelo conector do Claude, HeyGen, Hedra, Sync…)
+  e salve em `workspace/clipes/<pasta>/`; 3) `npm run lipsync -- <nome> clipes/<pasta>/avatar.mp4`.
+  O som continua vindo da `narracao.mp3` (legenda exata). Depois b-roll em `sobreposicoes`.
+- Primeiros 1,5 s de UGC: rosto + frase forte, ou b-roll `tela-cheia` do produto com a voz por cima.
+
 ## Regras de edição para anúncio
 
 - **Primeiros 1,5 s decidem tudo:** a cena 1 tem que ser o plano mais forte, com `movimento: "punch"`
@@ -43,9 +62,12 @@ o Remotion renderiza. O formato completo (com comentários) está em `src/schema
 - Transição não é enfeite: use `corte` na maior parte; `whip`/`zoom`/`flash` em 2–3 viradas importantes.
 - Legenda padrão: `hormozi`, posição `baixo` (fica acima da interface do app). Coloque em `legenda.enfase`
   as palavras de impacto (preço, "grátis", benefício principal).
-- **Clipes baixados (TikTok etc.):** use só trechos sem legenda/texto por cima e sem marca d'água.
-  Se a marca d'água ficar num canto o tempo todo, use `enquadramento` ({ zoom: 1.2–1.35, x, y }) para cortá-la
-  e confira no quadro. Áudio original sempre mudo (`volume: 0`, é o padrão).
+- **Clipes baixados (TikTok etc.):** NUNCA pode aparecer `@criador`, marca d'água, título ou legenda do vídeo
+  original (ex.: "preparando tábuas de frios"). Rode `npm run analisar -- <pasta> --quadros` e olhe as grades
+  de 0,5 s. Texto temporário → corte fora (use só as janelas limpas). Texto fixo num canto/faixa →
+  `enquadramento` ({ zoom: 1.15–1.3, x, y }) empurrando o texto para fora do quadro; confira no `conferencia.jpg`.
+  Rótulos/marcas de produtos que aparecem na cena (frascos, embalagens) **não** são problema.
+  Clipes de baixa resolução (≤ 720 px de largura): zoom no máximo 1.25. Áudio original sempre mudo (`volume: 0`).
 - Mostre o produto em uso. Se repetir um clipe, use outro trecho ou `espelhar: true`.
 - O CTA final fica pelo menos 2 s na tela.
 - Música: `volume` 0.3–0.4 sem voz, `volumeComVoz` 0.08–0.15 (o ducking é automático).
@@ -59,6 +81,7 @@ o Remotion renderiza. O formato completo (com comentários) está em `src/schema
 | `movimento` | nenhum, zoom-in, zoom-out, pan-esquerda, pan-direita, punch, tremor |
 | `legenda.template` | hormozi, tiktok, caixa, karaoke, neon, uma-palavra, minimal |
 | `textos[].estilo` | hook, cta, etiqueta, preco, titulo |
+| `sobreposicoes[].layout` | tela-cheia, pip, metade-cima, metade-baixo |
 
 - Tempos de `legenda.palavras` e `textos` são no **timeline final** do criativo.
   Tempos de `cenas[].inicio/fim` são do **clipe original**. Transições sobrepõem as cenas

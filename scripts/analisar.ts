@@ -1,6 +1,8 @@
 /**
  * Inventário dos clipes de uma pasta, para o Claude "ver" o material sem assistir tudo.
- *   npm run analisar -- <pasta em workspace/clipes> [--transcrever]
+ *   npm run analisar -- <pasta em workspace/clipes> [--transcrever] [--quadros]
+ * --quadros: também gera grades com 1 quadro a cada 0,5 s (6x4 = 12 s por imagem) para achar
+ *            textos, títulos e @ de criador que aparecem só por um instante.
  * Gera em workspace/clipes/<pasta>/_analise/:
  *   - inventario.md  → duração, resolução, fps, áudio, cortes de cena (e fala, se --transcrever)
  *   - <clipe>.jpg    → folha de contato com 8 quadros (tempos listados no inventário)
@@ -31,7 +33,10 @@ const folhaDeContato = async (arq: string, dur: number, saida: string) => {
 };
 
 principal(async () => {
-  const { positionals, values } = parseArgs({ allowPositionals: true, options: { transcrever: { type: "boolean", default: false } } });
+  const { positionals, values } = parseArgs({
+    allowPositionals: true,
+    options: { transcrever: { type: "boolean", default: false }, quadros: { type: "boolean", default: false } },
+  });
   const nome = positionals[0];
   if (!nome) throw new Error("Informe a pasta. Ex.: npm run analisar -- tabuas");
   const pasta = path.join(CLIPES, nome);
@@ -65,6 +70,14 @@ principal(async () => {
       `- cortes de cena em: ${cortes.length ? cortes.map((t) => t.toFixed(2) + "s").join(", ") : "nenhum (plano contínuo)"}`,
       `- folha de contato: \`${relWorkspace(jpg)}\` (quadros em ${tempos.join("s, ")}s, da esquerda p/ direita, de cima p/ baixo)`,
     );
+    if (values.quadros) {
+      const base = path.join(saida, `${path.parse(f).name}-quadros-%02d.jpg`);
+      await rodar(FFMPEG, ["-y", "-hide_banner", "-i", abs, "-vf", "fps=2,scale=200:-2,tile=6x4:padding=3:color=white", "-q:v", "5", base], { silencioso: true });
+      const n = Math.ceil(info.duracao / 12);
+      linhas.push(
+        `- quadros a cada 0,5 s: \`${relWorkspace(path.join(saida, `${path.parse(f).name}-quadros-01.jpg`))}\` … (${n} imagem/ns; imagem N, célula k (0-23, esq→dir, cima→baixo) = ${"`"}(N-1)*12 + k*0,5${"`"} s)`,
+      );
+    }
     if (values.transcrever && info.temAudio) {
       const palavras = await transcreverLocal(abs);
       writeFileSync(`${abs}.palavras.json`, JSON.stringify(palavras, null, 1));

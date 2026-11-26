@@ -4,6 +4,7 @@ import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { criativoSchema, framesDaCena, framesDaTransicao, type CriativoInput } from "./schema";
 import { CenaView, src } from "./componentes/CenaView";
 import { TextoView } from "./componentes/TextoView";
+import { SobreposicaoView } from "./componentes/SobreposicaoView";
 import { LegendaView } from "./legendas/LegendaView";
 import { apresentacao } from "./transicoes";
 
@@ -63,6 +64,15 @@ export const Criativo: React.FC<CriativoInput> = (props) => {
           return els;
         })}
       </TransitionSeries>
+
+      {c.sobreposicoes.map((so, i) => {
+        const dur = Math.max(1, Math.round(((so.fim - so.inicio) / so.velocidade) * fps));
+        return (
+          <Sequence key={`so${i}`} from={Math.round(so.em * fps)} durationInFrames={dur} premountFor={fps}>
+            <SobreposicaoView s={so} duracao={dur} />
+          </Sequence>
+        );
+      })}
 
       {c.textos.map((tx, i) => {
         const from = Math.round(tx.inicio * fps);

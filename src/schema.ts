@@ -85,6 +85,26 @@ const cena = z.object({
 });
 export type Cena = z.infer<typeof cena>;
 
+/**
+ * B-roll por cima da cena principal (UGC / lipsync): a fala continua por baixo
+ * e a imagem do produto entra por cima. `em` = segundo no timeline final.
+ */
+const sobreposicao = z.object({
+  clipe: z.string(),
+  inicio: z.number().default(0),
+  fim: z.number(),
+  em: z.number(),
+  velocidade: z.number().positive().default(1),
+  layout: z.enum(["tela-cheia", "pip", "metade-cima", "metade-baixo"]).default("tela-cheia"),
+  entrada: z.enum(["corte", "fade", "pop", "slide"]).default("corte"),
+  movimento: z.enum(MOVIMENTOS).default("zoom-in"),
+  enquadramento: z
+    .object({ zoom: z.number().min(1).max(3).default(1), x: z.number().default(0), y: z.number().default(0) })
+    .optional(),
+  volume: z.number().min(0).max(2).default(0),
+});
+export type Sobreposicao = z.infer<typeof sobreposicao>;
+
 const legenda = z.object({
   ativa: z.boolean().default(true),
   template: z.enum(TEMPLATES_LEGENDA).default("hormozi"),
@@ -143,6 +163,7 @@ export const criativoSchema = z.object({
       fadeOut: z.number().default(1),
     })
     .optional(),
+  sobreposicoes: z.array(sobreposicao).default([]),
   legenda: legenda.optional(),
   textos: z.array(texto).default([]),
   /** Cor de fundo quando o clipe não cobre o quadro */

@@ -70,6 +70,14 @@ const cena = z.object({
   volume: z.number().min(0).max(2).default(0),
   /** Filtro CSS opcional, ex.: "saturate(1.2) contrast(1.1)" */
   filtro: z.string().optional(),
+  /**
+   * Reenquadrar para esconder marca d'água/legenda do vídeo original.
+   * zoom 1.2 = aproxima 20%; x/y em % deslocam o centro (-50 a 50). Ex.: marca no canto
+   * inferior direito → { zoom: 1.25, x: 8, y: 8 } empurra a imagem e corta esse canto.
+   */
+  enquadramento: z
+    .object({ zoom: z.number().min(1).max(3).default(1), x: z.number().default(0), y: z.number().default(0) })
+    .optional(),
   /** Espelhar horizontalmente (ajuda a disfarçar clipe repetido) */
   espelhar: z.boolean().default(false),
   /** Anotação livre: qual beat da copy esta cena cobre */

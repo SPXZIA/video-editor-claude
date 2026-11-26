@@ -46,7 +46,9 @@ export const CenaView: React.FC<{ cena: Cena; duracao: number }> = ({ cena, dura
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const p = duracao > 1 ? frame / (duracao - 1) : 0;
-  const transform = [movimento(cena.movimento, p, frame, fps), cena.espelhar ? "scaleX(-1)" : ""]
+  const enq = cena.enquadramento;
+  const reenquadrar = enq ? `scale(${enq.zoom}) translate(${enq.x}%, ${enq.y}%)` : "";
+  const transform = [reenquadrar, movimento(cena.movimento, p, frame, fps), cena.espelhar ? "scaleX(-1)" : ""]
     .filter((t) => t && t !== "none")
     .join(" ");
 

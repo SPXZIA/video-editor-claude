@@ -43,6 +43,9 @@ o Remotion renderiza. O formato completo (com comentários) está em `src/schema
 - Transição não é enfeite: use `corte` na maior parte; `whip`/`zoom`/`flash` em 2–3 viradas importantes.
 - Legenda padrão: `hormozi`, posição `baixo` (fica acima da interface do app). Coloque em `legenda.enfase`
   as palavras de impacto (preço, "grátis", benefício principal).
+- **Clipes baixados (TikTok etc.):** use só trechos sem legenda/texto por cima e sem marca d'água.
+  Se a marca d'água ficar num canto o tempo todo, use `enquadramento` ({ zoom: 1.2–1.35, x, y }) para cortá-la
+  e confira no quadro. Áudio original sempre mudo (`volume: 0`, é o padrão).
 - Mostre o produto em uso. Se repetir um clipe, use outro trecho ou `espelhar: true`.
 - O CTA final fica pelo menos 2 s na tela.
 - Música: `volume` 0.3–0.4 sem voz, `volumeComVoz` 0.08–0.15 (o ducking é automático).

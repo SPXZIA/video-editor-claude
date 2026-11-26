@@ -13,6 +13,8 @@ O editor fica em: `{{EDITOR}}`
    da pasta atual (onde o usuário abriu o Claude) para o editor, sem apagar os originais:
    - vídeos de produto / b-roll → `{{EDITOR}}/workspace/clipes/<nome>/`
    - vídeo de avatar/UGC (pessoa falando, HeyGen) → `{{EDITOR}}/workspace/clipes/<nome>/avatar/`
+   - gravação de tela do entregável (PDF, aplicativo) → `{{EDITOR}}/workspace/clipes/<nome>/entregavel/`
+     (pergunte "em que frase o entregável começa?" se o usuário não disse)
    - músicas → `{{EDITOR}}/workspace/musicas/<clima>/` e rode `npm run musicas`
    Na dúvida sobre o que é cada arquivo, olhe (extraia um quadro) antes de perguntar.
 3. Rode todos os comandos `npm run …` **dentro de `{{EDITOR}}`** (ex.: `cd "{{EDITOR}}" && npm run analisar -- <nome> --quadros`).

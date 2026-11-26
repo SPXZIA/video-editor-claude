@@ -106,6 +106,11 @@ Os dois usam uma **trilha principal (A-roll)** de alguém falando + **b-roll por
   Rótulos/marcas de produtos que aparecem na cena (frascos, embalagens) **não** são problema.
   Clipes de baixa resolução (≤ 720 px de largura): zoom no máximo 1.25. Áudio original sempre mudo (`volume: 0`).
 - Mostre o produto em uso. Se repetir um clipe, use outro trecho ou `espelhar: true`.
+- **Vídeo do entregável (gravação de tela do PDF ou do app):** o Jean diz em que frase da copy ele começa
+  ("o entregável começa na frase X"). Antes dessa frase, só b-roll/avatar; da frase X em diante, as cenas usam o
+  vídeo do entregável (em ordem, sem repetir trecho), até o CTA. A duração dessa parte da narração define quanto
+  do vídeo do entregável entra: se ele for mais curto, desacelere um pouco (`velocidade` até 0.8) ou intercale
+  b-roll; se for mais longo, use os trechos mais fortes (páginas/telas mais bonitas). Se ele não disser a frase, pergunte.
 - O CTA final fica pelo menos 2 s na tela.
 - Música: `volume` 0.3–0.4 sem voz, `volumeComVoz` 0.08–0.15 (o ducking é automático).
 - Formato padrão 9:16. Para feed, 4:5. Mesmo JSON, só troque `formato`.

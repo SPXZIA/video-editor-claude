@@ -1,0 +1,44 @@
+{
+  "name": "editor-criativos",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Editor de criativos local controlado pelo Claude: Remotion + Whisper + ElevenLabs",
+  "type": "module",
+  "scripts": {
+    "sync": "tsx scripts/sync.ts",
+    "studio": "npm run sync && remotion studio",
+    "novo": "tsx scripts/novo.ts",
+    "analisar": "tsx scripts/analisar.ts",
+    "transcrever": "tsx scripts/transcrever.ts",
+    "narrar": "tsx scripts/narrar.ts",
+    "vozes": "tsx scripts/vozes.ts",
+    "musicas": "tsx scripts/musicas.ts",
+    "render": "npm run sync && tsx scripts/render.ts",
+    "conferir": "tsx scripts/conferir.ts",
+    "exemplo": "tsx scripts/exemplo.ts",
+    "verificar": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.547",
+    "@remotion/cli": "^4.0.547",
+    "@remotion/fonts": "^4.0.547",
+    "@remotion/install-whisper-cpp": "^4.0.547",
+    "@remotion/renderer": "^4.0.547",
+    "@remotion/transitions": "^4.0.547",
+    "@remotion/zod-types": "^4.0.547",
+    "ffmpeg-static": "^5.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "remotion": "^4.0.547",
+    "zod": "^3.22.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

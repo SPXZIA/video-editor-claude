@@ -1,0 +1,258 @@
+{
+  "nome": "exemplo",
+  "formato": "9:16",
+  "fps": 30,
+  "copy": {
+    "hook": "Você ainda corta tudo numa tábua de plástico?",
+    "body": "A tábua de madeira maciça não estraga sua faca, dura anos e ainda deixa a cozinha linda.",
+    "cta": "Clica no link e garante a sua com frete grátis."
+  },
+  "cenas": [
+    {
+      "clipe": "clipes/exemplo/clipe-1.mp4",
+      "inicio": 0,
+      "fim": 3.2,
+      "movimento": "punch",
+      "transicao": "whip",
+      "beat": "hook"
+    },
+    {
+      "clipe": "clipes/exemplo/clipe-2.mp4",
+      "inicio": 0.5,
+      "fim": 3.5,
+      "movimento": "zoom-in",
+      "transicao": "zoom",
+      "beat": "body"
+    },
+    {
+      "clipe": "clipes/exemplo/clipe-3.mp4",
+      "inicio": 0,
+      "fim": 3.4,
+      "movimento": "pan-direita",
+      "transicao": "flash",
+      "beat": "body"
+    },
+    {
+      "clipe": "clipes/exemplo/clipe-4.mp4",
+      "inicio": 0,
+      "fim": 3.8,
+      "movimento": "zoom-out",
+      "transicao": "corte",
+      "beat": "cta"
+    }
+  ],
+  "musica": {
+    "arquivo": "musicas/exemplo/batida-teste.mp3",
+    "volume": 0.35,
+    "volumeComVoz": 0.12
+  },
+  "legenda": {
+    "ativa": true,
+    "template": "hormozi",
+    "posicao": "baixo",
+    "palavras": [
+      {
+        "texto": "Você",
+        "inicio": 0.2,
+        "fim": 0.48
+      },
+      {
+        "texto": "ainda",
+        "inicio": 0.52,
+        "fim": 0.825
+      },
+      {
+        "texto": "corta",
+        "inicio": 0.865,
+        "fim": 1.17
+      },
+      {
+        "texto": "tudo",
+        "inicio": 1.21,
+        "fim": 1.49
+      },
+      {
+        "texto": "numa",
+        "inicio": 1.53,
+        "fim": 1.81
+      },
+      {
+        "texto": "tábua",
+        "inicio": 1.85,
+        "fim": 2.155
+      },
+      {
+        "texto": "de",
+        "inicio": 2.195,
+        "fim": 2.425
+      },
+      {
+        "texto": "plástico?",
+        "inicio": 2.465,
+        "fim": 2.87
+      },
+      {
+        "texto": "A",
+        "inicio": 3.2,
+        "fim": 3.405
+      },
+      {
+        "texto": "tábua",
+        "inicio": 3.445,
+        "fim": 3.75
+      },
+      {
+        "texto": "de",
+        "inicio": 3.79,
+        "fim": 4.02
+      },
+      {
+        "texto": "madeira",
+        "inicio": 4.06,
+        "fim": 4.415
+      },
+      {
+        "texto": "maciça",
+        "inicio": 4.455,
+        "fim": 4.785
+      },
+      {
+        "texto": "não",
+        "inicio": 4.825,
+        "fim": 5.08
+      },
+      {
+        "texto": "estraga",
+        "inicio": 5.12,
+        "fim": 5.475
+      },
+      {
+        "texto": "sua",
+        "inicio": 5.515,
+        "fim": 5.77
+      },
+      {
+        "texto": "faca,",
+        "inicio": 5.81,
+        "fim": 6.115
+      },
+      {
+        "texto": "dura",
+        "inicio": 5.9,
+        "fim": 6.18
+      },
+      {
+        "texto": "anos",
+        "inicio": 6.22,
+        "fim": 6.5
+      },
+      {
+        "texto": "e",
+        "inicio": 6.54,
+        "fim": 6.745
+      },
+      {
+        "texto": "ainda",
+        "inicio": 6.785,
+        "fim": 7.09
+      },
+      {
+        "texto": "deixa",
+        "inicio": 7.13,
+        "fim": 7.435
+      },
+      {
+        "texto": "a",
+        "inicio": 7.475,
+        "fim": 7.68
+      },
+      {
+        "texto": "cozinha",
+        "inicio": 7.72,
+        "fim": 8.075
+      },
+      {
+        "texto": "linda.",
+        "inicio": 8.115,
+        "fim": 8.445
+      },
+      {
+        "texto": "Clica",
+        "inicio": 9,
+        "fim": 9.305
+      },
+      {
+        "texto": "no",
+        "inicio": 9.345,
+        "fim": 9.575
+      },
+      {
+        "texto": "link",
+        "inicio": 9.615,
+        "fim": 9.895
+      },
+      {
+        "texto": "e",
+        "inicio": 9.935,
+        "fim": 10.14
+      },
+      {
+        "texto": "garante",
+        "inicio": 10.18,
+        "fim": 10.535
+      },
+      {
+        "texto": "a",
+        "inicio": 10.575,
+        "fim": 10.78
+      },
+      {
+        "texto": "sua",
+        "inicio": 10.82,
+        "fim": 11.075
+      },
+      {
+        "texto": "com",
+        "inicio": 11.115,
+        "fim": 11.37
+      },
+      {
+        "texto": "frete",
+        "inicio": 11.41,
+        "fim": 11.715
+      },
+      {
+        "texto": "grátis.",
+        "inicio": 11.755,
+        "fim": 12.11
+      }
+    ],
+    "enfase": [
+      "grátis",
+      "maciça"
+    ]
+  },
+  "textos": [
+    {
+      "texto": "PARE DE USAR ISSO 🛑",
+      "inicio": 0,
+      "fim": 2.8,
+      "estilo": "hook",
+      "posicao": "cima"
+    },
+    {
+      "texto": "FRETE GRÁTIS",
+      "inicio": 9.6,
+      "fim": 12.2,
+      "estilo": "etiqueta",
+      "posicao": "cima"
+    },
+    {
+      "texto": "Compre agora 👉",
+      "inicio": 10.2,
+      "fim": 12.2,
+      "estilo": "cta",
+      "posicao": "baixo"
+    }
+  ]
+}

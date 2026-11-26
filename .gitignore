@@ -1,0 +1,16 @@
+node_modules/
+.env
+out/
+.cache/
+whisper/
+# Mídia do usuário fica só no computador dele
+workspace/clipes/*
+!workspace/clipes/.gitkeep
+workspace/musicas/*
+!workspace/musicas/.gitkeep
+!workspace/musicas/LEIA-ME.md
+workspace/criativos/*
+!workspace/criativos/.gitkeep
+!workspace/criativos/exemplo/
+workspace/criativos/exemplo/saida/
+src/gerado/criativos.ts
